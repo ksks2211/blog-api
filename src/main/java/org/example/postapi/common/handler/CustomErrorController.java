@@ -1,4 +1,4 @@
-package org.example.postapi.common.exception;
+package org.example.postapi.common.handler;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;

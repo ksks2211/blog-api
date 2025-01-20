@@ -2,11 +2,15 @@ package org.example.postapi.common.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.*;
 
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.example.postapi.common.GlobalConstants.TIMESTAMP_PATTERN_FORMAT;
+import static org.example.postapi.common.GlobalConstants.TIMEZONE_FORMAT;
 
 /**
  * @author rival
@@ -20,8 +24,17 @@ import java.util.List;
 public class ApiResponse<T> {
 
 
-    // "success", "error"
-    private String status;
+    @AllArgsConstructor
+    @Getter
+    public enum Status{
+        SUCCESS("success"),ERROR("error");
+
+        @JsonValue
+        private final String value;
+    }
+
+
+    private Status status;
 
 
     private String message;
@@ -43,14 +56,14 @@ public class ApiResponse<T> {
     @ToString
     public static class Meta{
 
-        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX", timezone = "UTC")
+        @JsonFormat(pattern = TIMESTAMP_PATTERN_FORMAT, timezone = TIMEZONE_FORMAT)
         private final Instant timestamp =  Instant.now();
     }
 
     // 성공 응답 생성 메서드
     public static <T> ApiResponse<T> success(String message, T data) {
         return ApiResponse.<T>builder()
-            .status("success")
+            .status(Status.SUCCESS)
             .message(message)
             .data(data)
             .build();
@@ -59,7 +72,7 @@ public class ApiResponse<T> {
     // 에러 응답 생성 메서드
     public static ApiResponse<Void> error(String message, Object... errors) {
         return ApiResponse.<Void>builder()
-            .status("error")
+            .status(Status.ERROR)
             .message(message)
             .errors(Arrays.asList(errors))
             .build();

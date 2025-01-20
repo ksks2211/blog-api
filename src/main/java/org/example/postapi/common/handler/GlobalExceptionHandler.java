@@ -1,9 +1,8 @@
-package org.example.postapi.common.exception;
+package org.example.postapi.common.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.postapi.common.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,15 +22,6 @@ import java.util.Map;
 @ControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> handleIllegalArgumentException(IllegalArgumentException e) {
-        log.info("Illegal Argument Exception : {}",e.getMessage());
-
-        var body = ApiResponse.error("Bad Request", e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
-    }
-
 
     @ExceptionHandler(value= MethodArgumentNotValidException.class)
     @ResponseBody

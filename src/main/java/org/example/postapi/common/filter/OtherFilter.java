@@ -3,6 +3,7 @@ package org.example.postapi.common.filter;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import lombok.extern.slf4j.Slf4j;
+import org.example.postapi.user.exception.AppUserNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class OtherFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         log.info("Web Filter");
 
+//        throw new AppUserNotFoundException("Test");
         chain.doFilter(request, response);
     }
 

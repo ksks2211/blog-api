@@ -10,9 +10,11 @@ Spring Boot REST API for Blog system
 ### Web Basic Features
 - [x] error handling
 - [ ] logging
-- [ ] unit testing
+- [ ] unit test
 - [ ] request : validation
 - [ ] response : structured
+- [ ] internal : mapper
+- [ ] constants, enums
 
 ### Relational Database
 - [ ] spring data jpa
@@ -38,3 +40,11 @@ Spring Boot REST API for Blog system
 
 ### Deployments
 - [ ] docker
+
+
+---
+
+## Getting Started
+
+### Run dev server
+- `./gradlew bootRun --args='--spring.profiles.active=dev''`
