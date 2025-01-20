@@ -11,9 +11,9 @@ Spring Boot REST API for Blog system
 - [x] error handling
 - [ ] logging
 - [ ] unit test
-- [ ] request : validation
+- [x] request : validation
 - [ ] response : structured
-- [ ] internal : mapper
+- [ ] internal : mapper (mapstruct)
 - [ ] constants, enums
 
 ### Relational Database
@@ -23,7 +23,7 @@ Spring Boot REST API for Blog system
 
 
 ### Security
-- [ ] JWT Login
+- [x] JWT Login
 - [ ] OAuth2.0 Login
 - [ ] Session for OAuth2.0 Login Request
 
