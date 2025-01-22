@@ -16,14 +16,17 @@ Spring Boot REST API for Blog system
 - [ ] internal : mapper (mapstruct)
 - [ ] constants, enums
 
+### Storages
+- [ ] Image files
+
 ### Relational Database
 - [ ] spring data jpa
 - [ ] dynamic query
 - [ ] n + 1 problem
 
-
 ### Security
 - [x] JWT Login
+- [ ] Refresh Token Login
 - [ ] OAuth2.0 Login
 - [ ] Session for OAuth2.0 Login Request
 

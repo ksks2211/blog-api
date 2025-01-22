@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.postapi.security.AuthUser;
 import org.example.postapi.security.AuthUserService;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContext;
@@ -23,6 +22,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.UUID;
+
+import static org.example.postapi.common.util.ExceptionUtils.toAuthenticationException;
 
 /**
  * @author rival
@@ -46,9 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }catch(Exception ex){
             securityContextHolderStrategy.clearContext();
             log.debug("Failed to process jwt authentication request", ex);
-            AuthenticationException exception = ex instanceof AuthenticationException ?
-                (AuthenticationException) ex :
-                new AuthenticationServiceException(ex.getMessage(), ex);
+            AuthenticationException exception = toAuthenticationException(ex);
             this.authenticationEntryPoint.commence(request, response, exception);
             return;
         }
@@ -73,9 +72,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // throws - AppUserNotFoundException
             AuthUser authUser = authUserService.loadUserById(userId);
 
-
-            // Remove credentials
-            authUser.eraseCredentials();
 
             // authenticated
             var authentication = new UsernamePasswordAuthenticationToken(

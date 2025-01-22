@@ -4,10 +4,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.Filter;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
+import org.example.postapi.refresh.RefreshCookieService;
+import org.example.postapi.refresh.RefreshTokenService;
 import org.example.postapi.security.AuthUserService;
 import org.example.postapi.security.jwt.JwtAuthenticationFilter;
 import org.example.postapi.security.jwt.JwtLoginFilter;
+import org.example.postapi.security.jwt.JwtRefreshFilter;
 import org.example.postapi.security.jwt.JwtService;
+import org.example.postapi.security.oauth2.NoOpOAuth2AuthorizedClientService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,8 +41,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Collections;
 import java.util.List;
 
-import static org.example.postapi.security.SecurityConstants.LOGIN_URL_PATTERN;
-import static org.example.postapi.security.SecurityConstants.LOGOUT_URL;
+import static org.example.postapi.security.SecurityConstants.*;
 import static org.example.postapi.user.AppUserConstants.ACCOUNT_URL_PATTERN;
 
 /**
@@ -52,6 +56,9 @@ import static org.example.postapi.user.AppUserConstants.ACCOUNT_URL_PATTERN;
 public class SecurityFilterConfig {
 
 
+    @Value("${server.servlet.context-path}")
+    private String SERVLET_CONTEXT_PATH;
+
     private final ObjectMapper objectMapper;
     private final Validator validator;
     private final AuthenticationConfiguration authConfig;
@@ -59,7 +66,8 @@ public class SecurityFilterConfig {
     // Services
     private final JwtService jwtService;
     private final AuthUserService authUserService;
-
+    private final RefreshCookieService refreshCookieService;
+    private final RefreshTokenService refreshTokenService;
 
 
     // Handlers
@@ -71,11 +79,23 @@ public class SecurityFilterConfig {
     private final AuthenticationFailureHandler authenticationFailureHandler;
 
 
+
+
+
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return authConfig.getAuthenticationManager();
     }
 
+
+    // Filters
+
+
+    private JwtRefreshFilter jwtRefreshFilter(){
+        return new JwtRefreshFilter(SERVLET_CONTEXT_PATH + REFRESH_LOGIN_URI,
+            refreshCookieService,refreshTokenService, authUserService,
+            authenticationSuccessHandler,authenticationFailureHandler);
+    }
 
     private JwtLoginFilter jwtLoginFilter() throws Exception {
         JwtLoginFilter jwtLoginFilter = new JwtLoginFilter(authenticationManager(), objectMapper, validator);
@@ -87,6 +107,9 @@ public class SecurityFilterConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter(){
         return new JwtAuthenticationFilter(jwtService,authenticationEntryPoint,authUserService);
     }
+
+
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -117,11 +140,11 @@ public class SecurityFilterConfig {
 
         http.authorizeHttpRequests(config -> config
                 .requestMatchers(
-                    new AntPathRequestMatcher(LOGIN_URL_PATTERN),
+                    new AntPathRequestMatcher(LOGIN_URI_PATTERN),
                     new AntPathRequestMatcher(ACCOUNT_URL_PATTERN),
                     new AntPathRequestMatcher("/test/**")
                     ).permitAll()
-                .requestMatchers(new AntPathRequestMatcher(LOGOUT_URL)).authenticated()
+                .requestMatchers(new AntPathRequestMatcher(LOGOUT_URI)).authenticated()
                 .anyRequest().permitAll()
             );
 
@@ -134,8 +157,9 @@ public class SecurityFilterConfig {
 
 
         // Insert JWT filters
-        http.addFilterAt(jwtLoginFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtRefreshFilter(), BasicAuthenticationFilter.class);
         http.addFilterAt(jwtAuthenticationFilter(), BasicAuthenticationFilter.class);
+        http.addFilterAt(jwtLoginFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
 
@@ -146,18 +170,25 @@ public class SecurityFilterConfig {
 
 
 
-        // http.logout(AbstractHttpConfigurer::disable);
         http.logout(config -> config
             .addLogoutHandler(logoutHandler)
-//            .deleteCookies(cookieProvider.getRefreshCookieName())
-            .invalidateHttpSession(true) // in case session exists
-            .logoutUrl(LOGOUT_URL)
+            .invalidateHttpSession(true)
+            .logoutUrl(LOGOUT_URI)
             .logoutSuccessHandler(logoutSuccessHandler)
         );
 
 
-        var chain = http.build();
 
+        // oauth2
+        http.oauth2Login(config -> config
+            .authorizationEndpoint(endpoint -> endpoint.baseUri(OAUTH2_AUTHORIZATION_BASE_URI))
+            .successHandler(authenticationSuccessHandler)
+            .failureHandler(authenticationFailureHandler)
+            .authorizedClientService(new NoOpOAuth2AuthorizedClientService())
+        );
+
+
+        var chain = http.build();
         reorderFilters(chain.getFilters());
 
 
@@ -173,6 +204,8 @@ public class SecurityFilterConfig {
         for (int i = 0; i < filters.size(); i++) {
             if (filters.get(i) instanceof LogoutFilter) {
                 logoutFilter = (LogoutFilter) filters.remove(i);
+
+
                 break;
             }
         }

@@ -18,7 +18,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.example.postapi.security.SecurityConstants.JWT_LOGIN_URL;
+import static org.example.postapi.security.SecurityConstants.JWT_LOGIN_URI;
 
 /**
  * @author rival
@@ -33,7 +33,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 
     public JwtLoginFilter(AuthenticationManager authenticationManager, ObjectMapper objectMapper, Validator validator) {
-        super(new AntPathRequestMatcher(JWT_LOGIN_URL, HTTP_METHOD), authenticationManager);
+        super(new AntPathRequestMatcher(JWT_LOGIN_URI, HTTP_METHOD), authenticationManager);
         this.objectMapper = objectMapper;
         this.validator= validator;
     }

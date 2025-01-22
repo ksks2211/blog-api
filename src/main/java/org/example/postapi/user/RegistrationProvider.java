@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum RegistrationProvider {
-    LOCAL("local"), GOOGLE("google");
+    LOCAL("local"), GOOGLE("google"), FACEBOOK("facebook");
+
+
     private final String registrationId;
 }

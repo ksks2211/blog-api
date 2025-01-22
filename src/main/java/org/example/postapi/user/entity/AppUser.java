@@ -1,5 +1,6 @@
 package org.example.postapi.user.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.example.postapi.common.entity.BaseEntity;
@@ -31,6 +32,9 @@ public class AppUser extends BaseEntity {
 
     @Column(unique = true)
     private String email;
+
+
+    @JsonIgnore
     private String password;
 
 
