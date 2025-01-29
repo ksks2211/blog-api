@@ -1,0 +1,56 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 2MB
+      max-request-size: 10MB
+  datasource:
+    url: jdbc:mysql://${MYSQL_URL}/${MYSQL_DATABASE}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+        show_sql: false
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: 6379
+      entry-ttl-minutes: 10
+      cache-prefix: "spring:cache:"
+  session:
+    timeout: 5m
+    redis:
+      namespace: "spring:"
+  security:
+    debug: true
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_SECRET}
+            redirect-uri: ${GOOGLE_REDIRECT_URI}
+            scope:
+              - profile
+              - email
+              - openid
+auth:
+  refresh-token:
+    exp-hours: 12
+    name: RefreshToken
+  jwt:
+    auth-exp-minutes: 30
+    secret-key: ${JWT_SECRET_KEY}
+    issuer: ${JWT_SECRET_ISSUER}
+cloud:
+  aws:
+    region:
+      static: ${AWS_REGION}
+    s3:
+      bucket: ${AWS_BUCKET}
+cdn:
+  baseUrl: ${CDN_BASE_URL}
