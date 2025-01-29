@@ -3,7 +3,6 @@ package org.example.postapi.common.filter;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import lombok.extern.slf4j.Slf4j;
-import org.example.postapi.user.exception.AppUserNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

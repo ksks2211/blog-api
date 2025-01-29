@@ -1,12 +1,14 @@
 package org.example.postapi.common.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import jakarta.persistence.*;
 
 import java.time.Instant;
 
@@ -35,6 +37,7 @@ public abstract class BaseEntity {
 
     @Column
     private boolean deleted = false;
+
 
     public void softDelete(){
         if(!deleted) {

@@ -31,8 +31,6 @@ public class CacheConfig {
 
     @Bean
     public RedisSerializer<?> redisSerializer(){
-//        return new JdkSerializationRedisSerializer();
-
         return new GenericJackson2JsonRedisSerializer();
     }
 

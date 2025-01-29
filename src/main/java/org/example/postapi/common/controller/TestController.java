@@ -1,6 +1,5 @@
 package org.example.postapi.common.controller;
 
-import org.example.postapi.common.handler.PostNotFoundException;
 import org.example.postapi.user.exception.AppUserNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;

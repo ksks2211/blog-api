@@ -1,5 +1,6 @@
 package org.example.postapi.common.handler;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.example.postapi.common.dto.ApiResponse;
 import org.springframework.http.HttpStatus;
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import jakarta.validation.ConstraintViolationException;
 
 import java.util.HashMap;
 import java.util.Map;

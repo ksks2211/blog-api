@@ -3,6 +3,7 @@ package org.example.postapi.common.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
+import io.micrometer.common.lang.Nullable;
 import lombok.*;
 
 import java.time.Instant;
@@ -61,13 +62,22 @@ public class ApiResponse<T> {
     }
 
     // 성공 응답 생성 메서드
-    public static <T> ApiResponse<T> success(String message, T data) {
+    public static <T> ApiResponse<T> success(String message, @NonNull T data) {
         return ApiResponse.<T>builder()
             .status(Status.SUCCESS)
             .message(message)
             .data(data)
             .build();
     }
+
+    public static  ApiResponse<Void> success(String message) {
+        return ApiResponse.<Void>builder()
+            .status(Status.SUCCESS)
+            .message(message)
+            .build();
+    }
+
+
 
     // 에러 응답 생성 메서드
     public static ApiResponse<Void> error(String message, Object... errors) {

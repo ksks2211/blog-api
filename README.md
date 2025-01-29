@@ -17,7 +17,8 @@ Spring Boot REST API for Blog system
 - [ ] constants, enums
 
 ### Storages
-- [ ] Image files
+- [x] Handle Image files upload
+- [x] S3 + CDN(cloudfront)
 
 ### Relational Database
 - [ ] spring data jpa
@@ -26,12 +27,12 @@ Spring Boot REST API for Blog system
 
 ### Security
 - [x] JWT Login
-- [ ] Refresh Token Login
-- [ ] OAuth2.0 Login
-- [ ] Session for OAuth2.0 Login Request
+- [x] Refresh Token Login
+- [x] OAuth2.0 Login
+- [x] Session for OAuth2.0 Login Request
 
 ### Caching
-- [ ] cache with redis
+- [x] cache with redis
 
 ### Environments
 - [ ] .env
