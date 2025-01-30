@@ -35,7 +35,7 @@ Spring Boot REST API for Blog system
 - [x] cache with redis
 
 ### Environments
-- [ ] .env
+- [x] .env
 - [ ] application-{profile}.yml
 - [ ] secrets
 
@@ -43,7 +43,7 @@ Spring Boot REST API for Blog system
 - [ ] swagger
 
 ### Deployments
-- [ ] docker
+- [x] docker
 
 
 ---
@@ -51,4 +51,17 @@ Spring Boot REST API for Blog system
 ## Getting Started
 
 ### Run dev server
-- `./gradlew bootRun --args='--spring.profiles.active=dev''`
+- `./gradlew bootRun --args='--spring.profiles.active=dev'`
+
+### Build docker image
+- `docker build -t blog-api:latest ./`
+
+### Run docker image
+```shell
+docker run -d \
+   -p 8080:8080 \
+   -v ~/.aws:/root/.aws \
+   --name blog-api \
+   --env-file .env \
+   blog-api:latest
+```

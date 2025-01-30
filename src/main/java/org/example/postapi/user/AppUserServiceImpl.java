@@ -43,19 +43,27 @@ public class AppUserServiceImpl implements AppUserService{
         log.info("New Local AppUser(email={}) registered", user.getEmail());
     }
 
+
+    // Not inside Persistence Context
+    private AppUser createUnregisteredUser(RegistrationProvider provider, String providedId) {
+        return AppUser.builder().isSocial(true).registrationProvider(provider).providedId(providedId).build();
+    }
+
     @Override
     @Transactional
     public AppUser createOrUpdateAppUser(RegistrationProvider provider, String providedId, String providedName, String providedEmail) {
 
-        AppUser appUser = appUserRepository.findByRegistrationProviderAndProvidedId(provider, providedId).orElseGet(
-            () -> AppUser.builder().registrationProvider(provider).providedId(providedId).build());
+        AppUser appUser = appUserRepository
+            .findByRegistrationProviderAndProvidedId(provider, providedId)
+            .orElseGet(() -> createUnregisteredUser(provider, providedId));
+
+        appUser.setProvidedEmail(providedEmail);
+        appUser.setProvidedName(providedName);
+
         if(appUser.getId() == null){
             appUser.addRole(Role.USER);
             log.info("New OAuth2.0 AppUser(provider={}, subject={}) registered", provider, providedId);
         }
-
-        appUser.setProvidedEmail(providedEmail);
-        appUser.setProvidedName(providedName);
 
         return appUserRepository.save(appUser);
     }
