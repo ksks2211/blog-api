@@ -83,9 +83,9 @@ public class AuthUserService implements UserDetailsService {
 
         AuthUser user;
         if(appUser.isSocial()){
-            user= new AuthUser(appUser.getId(), appUser.getRegistrationProvider(), appUser.getProvidedId(), authorities);
+            user= new AuthUser(appUser.getId(), appUser.getRegistrationProvider(),appUser.getProvidedId(),appUser.getNickname(), authorities);
         }else{
-            user= new AuthUser(appUser.getId(), appUser.getEmail(), appUser.getPassword(), authorities);
+            user= new AuthUser(appUser.getId(), appUser.getEmail(), appUser.getPassword(),appUser.getNickname(), authorities);
         }
 
         if(eraseCredentials){

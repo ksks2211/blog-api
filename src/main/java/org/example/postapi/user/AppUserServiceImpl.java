@@ -32,13 +32,20 @@ public class AppUserServiceImpl implements AppUserService{
         if(appUserRepository.existsByEmail(email)){
             throw new EmailAlreadyExistsException(email);
         }
+
+        // User email id-part for initial nickname
+        String nickname = email.split("@")[0];
+
         AppUser user = AppUser.builder()
             .email(email)
             .password(passwordEncoder.encode(password))
             .build();
         user.addRole(Role.USER);
-        appUserRepository.save(user);
+        user.setNickname(nickname);
 
+
+
+        appUserRepository.save(user);
 
         log.info("New Local AppUser(email={}) registered", user.getEmail());
     }
@@ -60,8 +67,11 @@ public class AppUserServiceImpl implements AppUserService{
         appUser.setProvidedEmail(providedEmail);
         appUser.setProvidedName(providedName);
 
+
+        // New user
         if(appUser.getId() == null){
             appUser.addRole(Role.USER);
+            appUser.setNickname(providedName);
             log.info("New OAuth2.0 AppUser(provider={}, subject={}) registered", provider, providedId);
         }
 

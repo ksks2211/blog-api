@@ -41,14 +41,16 @@ public class AuthUser implements UserDetails, CredentialsContainer {
     private boolean accountNonLocked;
     private boolean credentialsNonExpired;
     private boolean enabled;
+    private String nickname;
 
 
     // Local User
-    public AuthUser(UUID id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
+    public AuthUser(UUID id, String email, String password, String nickname, Collection<? extends GrantedAuthority> authorities) {
 
         this.username = email;
         this.password = password;
         this.authorities = new HashSet<>(authorities);
+        this.nickname = nickname;
         this.accountNonExpired=true;
         this.accountNonLocked=true;
         this.enabled=true;
@@ -60,12 +62,13 @@ public class AuthUser implements UserDetails, CredentialsContainer {
 
 
 
-    public AuthUser(UUID id, RegistrationProvider provider, String sub,Collection<? extends GrantedAuthority> authorities){
+    public AuthUser(UUID id, RegistrationProvider provider, String sub, String nickname, Collection<? extends GrantedAuthority> authorities){
 
         this.username =  provider.name()+":"+sub;
         this.password = "EMPTY-VALUE";
         this.authorities = new HashSet<>(authorities);
         this.accountNonExpired=true;
+        this.nickname= nickname;
         this.accountNonLocked=true;
         this.enabled=true;
         this.credentialsNonExpired=true;

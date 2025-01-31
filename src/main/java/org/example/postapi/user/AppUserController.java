@@ -4,8 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.postapi.common.dto.ApiResponse;
+import org.example.postapi.security.AuthUser;
 import org.example.postapi.user.dto.UserRegisterRequest;
 import org.example.postapi.user.dto.UserRegisterResponse;
+import org.example.postapi.user.dto.UserStateResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -41,10 +43,16 @@ public class AppUserController {
 
 
 
-    @GetMapping("/who-am-i")
-    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/me")
     public ResponseEntity<?> whoAmI(@AuthenticationPrincipal final Object principal) {
-        return ResponseEntity.ok(principal);
+        var userState = new UserStateResponse();
+        if(principal instanceof AuthUser authUser){
+            userState.setLoggedIn(true);
+            userState.setNickname(authUser.getNickname());
+        }
+
+        var body = ApiResponse.success("User information", userState);
+        return ResponseEntity.ok(body);
     }
 
 

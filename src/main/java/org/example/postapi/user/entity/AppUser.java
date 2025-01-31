@@ -38,6 +38,9 @@ public class AppUser extends BaseEntity {
     private String password;
 
 
+
+    private String nickname;
+
     // OAuth2.0
     @Enumerated(EnumType.STRING)
     @Builder.Default
