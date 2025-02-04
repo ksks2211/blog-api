@@ -17,4 +17,9 @@ public interface BaseMapper {
         return createdAt.atZone(ZoneOffset.UTC).format(DateTimeFormatter.ISO_DATE_TIME);
     }
 
+    @Named("zeroBaseToOneBasePage")
+    default int zeroBaseToOneBasePage(int zeroBasedPageNum) {
+        return zeroBasedPageNum+1;
+    }
+
 }

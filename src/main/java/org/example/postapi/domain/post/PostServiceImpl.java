@@ -6,8 +6,10 @@ import org.example.postapi.common.resolver.PageRequestDefault;
 import org.example.postapi.domain.post.dto.req.PostCreateRequest;
 import org.example.postapi.domain.post.dto.req.PostSearchQueryRequest;
 import org.example.postapi.domain.post.dto.res.PostDetailResponse;
+import org.example.postapi.domain.post.dto.res.PostLoadMoreResponse;
 import org.example.postapi.domain.post.dto.res.PostPageResponse;
 import org.example.postapi.domain.post.dto.res.PostPrevAndNextResponse;
+import org.example.postapi.domain.post.repository.PostPreviewDto;
 import org.example.postapi.domain.post.repository.PostRepository;
 import org.example.postapi.domain.post.repository.PostSpecification;
 import org.example.postapi.domain.postag.PostTag;
@@ -18,7 +20,10 @@ import org.example.postapi.security.AuthUser;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,7 +85,8 @@ public class PostServiceImpl implements PostService{
 
     @Override
     public PostPageResponse findPosts(@PageRequestDefault Pageable pageable) {
-        return null;
+        Page<PostPreviewDto> page = postRepository.searchPostPage(PostSpecification.isNotDeleted(), pageable);
+        return postMapper.postPageToPostPageResponse(page);
     }
 
     @Override
@@ -88,14 +94,24 @@ public class PostServiceImpl implements PostService{
         return null;
     }
 
-    @Override
-    public PostPageResponse findNextPosts(Pageable pageable, Long postId) {
-        return null;
-    }
 
     @Override
-    public PostPageResponse findPrevPosts(Pageable pageable, Long postId) {
-        return null;
+    public PostLoadMoreResponse loadMorePosts(Pageable pageable, Long postId, String loadType) {
+        var notDeleted = PostSpecification.isNotDeleted();
+        var prevOrNext = loadType.equals("newer") ? PostSpecification.isNext(postId) : PostSpecification.isPrev(postId);
+        Sort sort = loadType.equals("newer") ? Sort.by(Post_.ID).ascending() : Sort.by(Post_.ID).descending();
+
+
+        PageRequest pageRequest = PageRequest.of(0, pageable.getPageSize(), sort);
+
+        List<PostPreviewDto> postList = postRepository.searchPostList(Specification.allOf(notDeleted, prevOrNext), pageRequest);
+
+
+        return PostLoadMoreResponse.builder()
+            .postList(postList)
+            .targetPostId(postId)
+            .load(loadType)
+            .build();
     }
 
     @Override

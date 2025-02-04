@@ -3,6 +3,7 @@ package org.example.postapi.domain.post;
 import org.example.postapi.domain.post.dto.req.PostCreateRequest;
 import org.example.postapi.domain.post.dto.req.PostSearchQueryRequest;
 import org.example.postapi.domain.post.dto.res.PostDetailResponse;
+import org.example.postapi.domain.post.dto.res.PostLoadMoreResponse;
 import org.example.postapi.domain.post.dto.res.PostPageResponse;
 import org.example.postapi.domain.post.dto.res.PostPrevAndNextResponse;
 import org.example.postapi.security.AuthUser;
@@ -25,8 +26,8 @@ public interface PostService {
 
     PostPageResponse findPosts(Pageable pageable);
     PostPageResponse findPosts(Pageable pageable, UUID userId);
-    PostPageResponse findNextPosts(Pageable pageable, Long postId);
-    PostPageResponse findPrevPosts(Pageable pageable, Long postId);
+
+    PostLoadMoreResponse loadMorePosts(Pageable pageable, Long postId, String loadType);
     PostPageResponse searchPosts(Pageable pageable, PostSearchQueryRequest postSearchQueryRequest);
 
     PostPrevAndNextResponse findPrevAndNext(Long id);

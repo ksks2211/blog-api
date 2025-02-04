@@ -3,6 +3,7 @@ package org.example.postapi.domain.post;
 import org.example.postapi.common.BaseMapper;
 import org.example.postapi.domain.post.dto.req.PostCreateRequest;
 import org.example.postapi.domain.post.dto.res.PostDetailResponse;
+import org.example.postapi.domain.post.dto.res.PostPageResponse;
 import org.example.postapi.domain.post.repository.PostPreviewDto;
 import org.example.postapi.domain.tag.Tag;
 import org.example.postapi.domain.user.entity.AppUser;
@@ -11,10 +12,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 import org.mapstruct.Named;
+import org.springframework.data.domain.Page;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,6 +34,10 @@ public interface PostMapper extends BaseMapper {
     )
     Post postCreateReqToPost(PostCreateRequest request);
 
+
+    @Mapping(source = "content", target = "postList")
+    @Mapping(target = "pageNumber", source = "number", qualifiedByName = "zeroBaseToOneBasePage")
+    PostPageResponse postPageToPostPageResponse(Page<PostPreviewDto> page);
 
 
     @Mappings(

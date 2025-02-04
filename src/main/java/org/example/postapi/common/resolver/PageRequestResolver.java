@@ -16,7 +16,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 public class PageRequestResolver implements HandlerMethodArgumentResolver {
 
 
-    public static final int DEFAULT_PAGE_SIZE = 10;
+    public static final int FIXED_PAGE_SIZE = 10;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -27,27 +27,20 @@ public class PageRequestResolver implements HandlerMethodArgumentResolver {
     public Object resolveArgument(@NotNull MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 
         String page = webRequest.getParameter("page");
-        String size = webRequest.getParameter("size");
-
-        PageRequest pageable = PageRequest.of(0, DEFAULT_PAGE_SIZE);
-
+//        String size = webRequest.getParameter("size");
         try{
-
             int p = page == null ? 1 : Integer.parseInt(page);
-            int s = size == null ? DEFAULT_PAGE_SIZE : Integer.parseInt(size);
-
+//            int s = size == null ? FIXED_PAGE_SIZE : Integer.parseInt(size);
             if(p < 1){
                 p = 1;
             }
-
-            if(s < 5 || s > 20){
-                s = DEFAULT_PAGE_SIZE;
-            }
-
+//            if(s < 5 || s > 20){
+//                s = FIXED_PAGE_SIZE;
+//            }
             // one base => zero base
-            return PageRequest.of(p-1, s);
+            return PageRequest.of(p-1, FIXED_PAGE_SIZE);
         }catch (Exception ignored){}
 
-        return pageable;
+        return PageRequest.of(0, FIXED_PAGE_SIZE);
     }
 }

@@ -253,7 +253,7 @@ class PostRepositoryTest {
         Specification<Post> spec = PostSpecification.haveTag(java);
 
 
-        Page<PostPreviewDto> postPreviewDtos = postRepository.searchPosts(spec, PageRequest.of(0, 10));
+        Page<PostPreviewDto> postPreviewDtos = postRepository.searchPostPage(spec, PageRequest.of(0, 10));
 
         System.out.println(postPreviewDtos);
         System.out.println(postPreviewDtos.getContent());
