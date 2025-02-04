@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.Filter;
 import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
-import org.example.postapi.refresh.RefreshCookieService;
-import org.example.postapi.refresh.RefreshTokenService;
+import org.example.postapi.domain.refresh.RefreshCookieService;
+import org.example.postapi.domain.refresh.RefreshTokenService;
 import org.example.postapi.security.AuthUserService;
 import org.example.postapi.security.jwt.JwtAuthenticationFilter;
 import org.example.postapi.security.jwt.JwtLoginFilter;
@@ -42,7 +42,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.example.postapi.security.SecurityConstants.*;
-import static org.example.postapi.user.AppUserConstants.ACCOUNT_URL_PATTERN;
+import static org.example.postapi.domain.user.AppUserConstants.ACCOUNT_URL_PATTERN;
 
 /**
  * @author rival
@@ -142,10 +142,10 @@ public class SecurityFilterConfig {
                 .requestMatchers(
                     new AntPathRequestMatcher(LOGIN_URI_PATTERN),
                     new AntPathRequestMatcher(ACCOUNT_URL_PATTERN),
-                    new AntPathRequestMatcher("/test/**")
+                    new AntPathRequestMatcher("/error")
                     ).permitAll()
-                .requestMatchers(new AntPathRequestMatcher(LOGOUT_URI)).authenticated()
-                .anyRequest().permitAll()
+//                .requestMatchers(new AntPathRequestMatcher(LOGOUT_URI)).authenticated()
+                .anyRequest().authenticated()
             );
 
 

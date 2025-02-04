@@ -3,7 +3,6 @@ package org.example.postapi.common.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.micrometer.common.lang.Nullable;
 import lombok.*;
 
 import java.time.Instant;
@@ -56,7 +55,6 @@ public class ApiResponse<T> {
     @NoArgsConstructor
     @ToString
     public static class Meta{
-
         @JsonFormat(pattern = TIMESTAMP_PATTERN_FORMAT, timezone = TIMEZONE_FORMAT)
         private final Instant timestamp =  Instant.now();
     }

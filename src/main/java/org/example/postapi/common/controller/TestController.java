@@ -1,10 +1,13 @@
 package org.example.postapi.common.controller;
 
-import org.example.postapi.user.exception.AppUserNotFoundException;
+import org.example.postapi.domain.post.repository.PostPreviewDto;
+import org.example.postapi.domain.user.exception.AppUserNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.time.Instant;
 
 /**
  * @author rival
@@ -49,4 +52,14 @@ public class TestController {
         throw new AppUserNotFoundException("Test");
     }
 
+
+
+
+    @GetMapping("/check")
+    public PostPreviewDto check(){
+        PostPreviewDto postPreviewDto = new PostPreviewDto();
+        postPreviewDto.setCreatedAt(Instant.now());
+
+        return postPreviewDto;
+    }
 }

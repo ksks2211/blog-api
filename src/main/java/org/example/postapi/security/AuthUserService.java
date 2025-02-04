@@ -2,12 +2,12 @@ package org.example.postapi.security;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.example.postapi.refresh.RefreshToken;
-import org.example.postapi.refresh.RefreshTokenService;
-import org.example.postapi.user.AppUserService;
-import org.example.postapi.user.RegistrationProvider;
-import org.example.postapi.user.entity.AppUser;
-import org.example.postapi.user.entity.UserRole;
+import org.example.postapi.domain.refresh.RefreshToken;
+import org.example.postapi.domain.refresh.RefreshTokenService;
+import org.example.postapi.domain.user.AppUserService;
+import org.example.postapi.domain.user.RegistrationProvider;
+import org.example.postapi.domain.user.entity.AppUser;
+import org.example.postapi.domain.user.entity.UserRole;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;

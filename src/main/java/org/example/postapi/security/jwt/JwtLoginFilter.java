@@ -6,7 +6,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validator;
 import lombok.extern.slf4j.Slf4j;
-import org.example.postapi.user.dto.LoginRequest;
+import org.example.postapi.domain.user.dto.LoginRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

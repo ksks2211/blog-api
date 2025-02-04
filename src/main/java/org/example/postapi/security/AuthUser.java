@@ -2,14 +2,15 @@ package org.example.postapi.security;
 
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.example.postapi.user.RegistrationProvider;
+import org.example.postapi.domain.user.RegistrationProvider;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -22,8 +23,10 @@ import java.util.UUID;
 @Setter
 @Getter
 @ToString
-@NoArgsConstructor  // for cache
-public class AuthUser implements UserDetails, CredentialsContainer {
+public class AuthUser implements UserDetails, CredentialsContainer, Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private UUID id;
 
@@ -44,36 +47,31 @@ public class AuthUser implements UserDetails, CredentialsContainer {
     private String nickname;
 
 
-    // Local User
-    public AuthUser(UUID id, String email, String password, String nickname, Collection<? extends GrantedAuthority> authorities) {
 
-        this.username = email;
-        this.password = password;
+    private AuthUser(UUID id,String nickname, Collection<? extends GrantedAuthority> authorities){
+        this.id=id;
         this.authorities = new HashSet<>(authorities);
-        this.nickname = nickname;
         this.accountNonExpired=true;
         this.accountNonLocked=true;
         this.enabled=true;
         this.credentialsNonExpired=true;
+        this.nickname=nickname;
+    }
 
-        this.id = id;
+    // Local User
+    public AuthUser(UUID id, String email, String password, String nickname, Collection<? extends GrantedAuthority> authorities) {
+        this(id, nickname, authorities);
+        this.username = email;
+        this.password = password;
         this.email = email;
     }
 
 
 
     public AuthUser(UUID id, RegistrationProvider provider, String sub, String nickname, Collection<? extends GrantedAuthority> authorities){
-
+        this(id, nickname, authorities);
         this.username =  provider.name()+":"+sub;
         this.password = "EMPTY-VALUE";
-        this.authorities = new HashSet<>(authorities);
-        this.accountNonExpired=true;
-        this.nickname= nickname;
-        this.accountNonLocked=true;
-        this.enabled=true;
-        this.credentialsNonExpired=true;
-
-        this.id = id;
         this.subject = provider.name()+":"+sub;
     }
 

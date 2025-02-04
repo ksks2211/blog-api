@@ -1,6 +1,6 @@
 package org.example.postapi.common.config;
 
-import lombok.RequiredArgsConstructor;
+import org.example.postapi.common.resolver.PageRequestResolver;
 import org.example.postapi.security.resolver.CurrentUserUUIDResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -15,13 +15,11 @@ import java.util.List;
  */
 @Configuration
 @EnableWebMvc
-@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
-
-    private final CurrentUserUUIDResolver currentUserUUIDResolver;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(currentUserUUIDResolver);
+        resolvers.add(new CurrentUserUUIDResolver());
+        resolvers.add(new PageRequestResolver());
     }
 }

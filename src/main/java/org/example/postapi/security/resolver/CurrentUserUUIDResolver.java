@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -18,7 +17,7 @@ import java.util.UUID;
  * @author rival
  * @since 2025-01-30
  */
-@Component
+
 @Slf4j
 public class CurrentUserUUIDResolver implements HandlerMethodArgumentResolver {
     @Override
@@ -29,6 +28,7 @@ public class CurrentUserUUIDResolver implements HandlerMethodArgumentResolver {
     @Override
     public Object resolveArgument(@NotNull MethodParameter parameter, ModelAndViewContainer mavContainer,@NotNull NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         if(authentication!=null && authentication.getPrincipal() instanceof AuthUser){
             return ((AuthUser)authentication.getPrincipal()).getId();
         }else{

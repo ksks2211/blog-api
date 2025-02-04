@@ -1,8 +1,11 @@
 package org.example.postapi.image;
 
 import org.example.postapi.common.config.JpaConfig;
-import org.example.postapi.user.AppUserRepository;
-import org.example.postapi.user.entity.AppUser;
+import org.example.postapi.domain.image.Image;
+import org.example.postapi.domain.image.ImageRepository;
+import org.example.postapi.domain.image.ImageSpecifications;
+import org.example.postapi.domain.user.AppUserRepository;
+import org.example.postapi.domain.user.entity.AppUser;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -102,7 +105,7 @@ class ImageRepositoryTest {
         var owner = create_user();
         Image image = create_image(owner);
 
-        List<Image> imageList = imageRepository.findAll(ImageSpecifications.isNotDeleted().and(ImageSpecifications.ownerEquals(owner)));
+        List<Image> imageList = imageRepository.findAll(ImageSpecifications.isNotDeleted().and(ImageSpecifications.ownedBy(owner)));
 
         assertEquals(1, imageList.size());
         Image foundImage = imageList.get(0);

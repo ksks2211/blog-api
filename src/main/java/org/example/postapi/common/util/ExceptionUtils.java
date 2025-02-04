@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
  */
 public class ExceptionUtils {
 
+    // Wrap any exception to authentication exception
     public static AuthenticationException toAuthenticationException(Exception ex) {
         return ex instanceof AuthenticationException ? (AuthenticationException)ex : new AuthenticationServiceException(ex.getMessage(), ex);
     }

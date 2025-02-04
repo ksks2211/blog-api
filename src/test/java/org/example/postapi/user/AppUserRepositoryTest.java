@@ -1,9 +1,10 @@
 package org.example.postapi.user;
 
 import org.example.postapi.common.config.JpaConfig;
-import org.example.postapi.user.entity.AppUser;
-import org.example.postapi.user.entity.Role;
-import org.example.postapi.user.entity.UserRole;
+import org.example.postapi.domain.user.AppUserRepository;
+import org.example.postapi.domain.user.entity.AppUser;
+import org.example.postapi.domain.user.entity.Role;
+import org.example.postapi.domain.user.entity.UserRole;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -11,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
